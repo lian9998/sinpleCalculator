@@ -1,0 +1,1 @@
+<!DOCTYPE html><html><body><dev>Calculator</dev><br><textarea id="a"></textarea><br><dev id="b"></dev></body><script>document.getElementById("a").addEventListener("keyup",()=>{let _=document.getElementById("b");try{_.innerText=eval(document.getElementById("a").value);_.style.color="black";}catch(e){_.innerText=e;_.style.color="red";}});</script></html>
