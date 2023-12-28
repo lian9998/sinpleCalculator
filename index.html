@@ -1,2 +1,41 @@
 <!DOCTYPE html>
-<html><body><dev>Calculator</dev><br><textarea id="a"></textarea><br><dev id="b"></dev></body><script>document.getElementById("a").addEventListener("keyup",()=>{let _=document.getElementById("b");try{_.innerText=eval(document.getElementById("a").value);_.style.color="black";}catch(e){_.innerText=e;_.style.color="red";}});</script></html>
+    <html>
+
+    <body> <textarea placeholder="Enter some script" name="name"></textarea> <br>
+        <p id="log"></p>
+    </body>
+    <script>
+        const input = document.querySelector("textarea");
+        const log = document.getElementById("log");
+        input.addEventListener("keyup", updateValue);
+        const worker_src = "data:text,onmessage=function(i){try{postMessage(eval(i.data));}catch(e){postMessage(e);}}";
+        var myWorker = new Worker(worker_src);
+        var worker_finish = false;
+
+        function create_worker() {
+            myWorker = new Worker(worker_src);
+            myWorker.onmessage = (e) => {
+                worker_finish = true;
+                try {
+                    log.textContent = e.data;
+                } catch (err) {
+                    log.textContent = err;
+                };
+            };
+            worker_finish = true;
+        };
+
+        function updateValue(e) {
+            try {
+                if (!worker_finish) {
+                    create_worker();
+                }
+                worker_finish = false;
+                myWorker.postMessage(input.value);
+            } catch (e) {
+                log.textContent = e;
+            }
+        };
+    </script>
+
+    </html>
